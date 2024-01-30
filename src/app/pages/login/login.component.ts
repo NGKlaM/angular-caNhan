@@ -16,22 +16,44 @@ export class LoginComponent {
     email: '',
     password: '',
   };
-  constructor(private authService: AuthService, private router: Router) {}
+
+  emailError: string;
+  passwordError: string;
+  
+  constructor(private authService: AuthService, private router: Router) {
+    this.emailError = '';
+    this.passwordError = '';
+  }
 
   handleLogin() {
-    this.authService.loginUser(this.loginUser).subscribe(
-      (response) => {
-        console.log('Login successful', response);
+    this.emailError = this.validateEmail();
+    this.passwordError = this.validatePassword();
 
-        // Lưu token vào sessionStorage hoặc nơi bạn muốn
-        sessionStorage.setItem('token', response.token);
+    if (!this.emailError && !this.passwordError) {
+      this.authService.loginUser(this.loginUser).subscribe(
+        (response) => {
+          console.log('Login successful', response);
+          sessionStorage.setItem('token', response.token);
+          this.router.navigate(['/admin/products']);
+        },
+        (error) => {
+          console.error('Login failed', error);
+        }
+      );
+    }
+  }
 
-        // Chuyển hướng đến route mong muốn
-        this.router.navigate(['/admin/products']);
-      },
-      (error) => {
-        console.error('Login failed', error);
-      }
-    );
+  private validateEmail(): string {
+    if (!this.loginUser.email) {
+      return 'Email is required';
+    }
+    return '';
+  }
+
+  private validatePassword(): string {
+    if (!this.loginUser.password) {
+      return 'Password is required';
+    }
+    return '';
   }
 }
