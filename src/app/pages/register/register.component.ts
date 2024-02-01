@@ -47,7 +47,7 @@ export class RegisterComponent {
   }
 
   private validateRegistration(): string {
-    if (!this.registerUser.fullname || !this.registerUser.email || !this.registerUser.password || !this.registerUser.confirmPassword) {
+    if (!this.registerUser.fullname.trim() || !this.registerUser.email.trim() || !this.registerUser.password.trim() || !this.registerUser.confirmPassword.trim()) {
       return 'All fields are required';
     }
 
@@ -55,7 +55,7 @@ export class RegisterComponent {
       return 'Passwords do not match';
     }
 
-    // You can add more validation logic as needed, e.g., email format, password strength, etc.
+    // Có thể thêm logic kiểm tra thêm, chẳng hạn như định dạng email, mức độ mạnh mẽ của mật khẩu, v.v.
 
     return '';
   }
